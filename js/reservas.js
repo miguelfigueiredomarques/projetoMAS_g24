@@ -15,16 +15,19 @@ function renderReservas() {
   } else {
     let html = "";
     reservas.forEach((reserva) => {
-      const isAtiva = reserva.estado === "Ativa";
+      // Garantir que temos um estado, por defeito "Ativa"
+      const estado = reserva.estado || "Ativa";
+      const isAtiva = estado === "Ativa";
+      
       let statusClass = "status-ativa";
-      if (reserva.estado === "Cancelada") statusClass = "status-cancelada";
-      if (reserva.estado === "Finalizada") statusClass = "status-finalizada";
+      if (estado === "Cancelada") statusClass = "status-cancelada";
+      if (estado === "Finalizada") statusClass = "status-finalizada";
       
       html += `
-        <div class="reserva-item ${reserva.estado !== 'Ativa' ? 'reserva-inativa' : ''}">
+        <div class="reserva-item ${!isAtiva ? 'reserva-inativa' : ''}">
           <img src="${reserva.imagem}" alt="${reserva.nome}">
           <div class="reserva-detalhes">
-            <h3>${reserva.nome} <span class="badge ${statusClass}">${reserva.estado}</span></h3>
+            <h3>${reserva.nome} <span class="badge ${statusClass}">${estado}</span></h3>
             <p class="reserva-meta">Início: ${reserva.dataInicio} | Fim: ${reserva.dataFim}</p>
             <p class="reserva-meta">Duração: ${reserva.duracaoLabel || reserva.duracaoDias + ' dias'}</p>
             <p class="reserva-preco">Total: ${reserva.preco}€</p>
