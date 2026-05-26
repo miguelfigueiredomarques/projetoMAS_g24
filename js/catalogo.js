@@ -56,25 +56,28 @@ function filterProducts() {
   const duracaoMin = duracaoMinFilter ? (parseInt(duracaoMinFilter.value) || 0) : 0;
 
   // Obter reservas diretamente do localStorage para garantir frescura total
-  let idsReservados = [];
+  let idsReservadosAtivos = [];
   try {
     const data = localStorage.getItem("unirent_reservas_v1");
     if (data) {
       const reservas = JSON.parse(data);
-      idsReservados = reservas.map(r => String(r.id));
+      // Apenas produtos com reserva "Ativa" ficam indisponíveis
+      idsReservadosAtivos = reservas
+        .filter(r => r.estado === "Ativa")
+        .map(r => String(r.id));
     }
   } catch (e) {
     console.error("DEBUG [Catalogo]: Erro ao ler storage diretamente:", e);
   }
   
-  console.log("DEBUG [Catalogo]: IDs Bloqueados (Reservados):", idsReservados);
+  console.log("DEBUG [Catalogo]: IDs Bloqueados (Reservas Ativas):", idsReservadosAtivos);
 
   const filtrados = products.filter(product => {
     const matchesSearch = product.nome.toLowerCase().includes(termo);
     const matchesTipo = tipo === "" || product.tipo === tipo;
     const matchesPreco = product.preco <= precoMax;
     const matchesDuracao = product.duracao >= duracaoMin;
-    const naoEstaReservado = !idsReservados.includes(String(product.id));
+    const naoEstaReservado = !idsReservadosAtivos.includes(String(product.id));
 
     return matchesSearch && matchesTipo && matchesPreco && matchesDuracao && naoEstaReservado;
   });

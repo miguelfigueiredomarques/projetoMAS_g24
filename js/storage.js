@@ -57,6 +57,10 @@ function cancelReserva(id_reserva) {
   return updateReserva(id_reserva, { estado: "Cancelada" });
 }
 
+function finalizeReserva(id_reserva) {
+  return updateReserva(id_reserva, { estado: "Finalizada" });
+}
+
 function removeReserva(index) {
   try {
     const reservas = getReservas();
@@ -75,4 +79,5 @@ window.getReservas = getReservas;
 window.saveReserva = saveReserva;
 window.updateReserva = updateReserva;
 window.cancelReserva = cancelReserva;
+window.finalizeReserva = finalizeReserva;
 window.removeReserva = removeReserva;

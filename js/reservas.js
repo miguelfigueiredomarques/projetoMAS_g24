@@ -16,10 +16,12 @@ function renderReservas() {
     let html = "";
     reservas.forEach((reserva) => {
       const isAtiva = reserva.estado === "Ativa";
-      const statusClass = isAtiva ? "status-ativa" : "status-cancelada";
+      let statusClass = "status-ativa";
+      if (reserva.estado === "Cancelada") statusClass = "status-cancelada";
+      if (reserva.estado === "Finalizada") statusClass = "status-finalizada";
       
       html += `
-        <div class="reserva-item ${!isAtiva ? 'reserva-cancelada' : ''}">
+        <div class="reserva-item ${reserva.estado !== 'Ativa' ? 'reserva-inativa' : ''}">
           <img src="${reserva.imagem}" alt="${reserva.nome}">
           <div class="reserva-detalhes">
             <h3>${reserva.nome} <span class="badge ${statusClass}">${reserva.estado}</span></h3>
@@ -30,6 +32,7 @@ function renderReservas() {
           <div class="reserva-actions">
             ${isAtiva ? `
               <button class="btn-extend" onclick="openProlongar('${reserva.id_reserva}')">Prolongar</button>
+              <button class="btn-finalize" onclick="handleFinalizar('${reserva.id_reserva}')">Finalizar</button>
               <button class="btn-remove" onclick="handleCancelar('${reserva.id_reserva}')">Cancelar</button>
             ` : `
               <button class="btn-secondary" onclick="handleEliminar('${reserva.id_reserva}')">Eliminar Registo</button>
@@ -39,6 +42,19 @@ function renderReservas() {
       `;
     });
     reservasLista.innerHTML = html;
+  }
+}
+
+// --- FINALIZAÇÃO ---
+window.handleFinalizar = function(id) {
+  if(confirm("Deseja marcar esta reserva como finalizada? (Simula a entrega do equipamento)")) {
+    const sucesso = finalizeReserva(id);
+    if (sucesso) {
+      alert("Reserva finalizada com sucesso!");
+      renderReservas();
+    } else {
+      alert("Erro ao finalizar a reserva.");
+    }
   }
 }
 
