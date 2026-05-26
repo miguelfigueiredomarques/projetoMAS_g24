@@ -47,25 +47,32 @@ function verProduto(id) {
 }
 
 function filterProducts() {
+  console.log("DEBUG [Catalogo]: A filtrar produtos...");
+  
   const termo = searchInput.value.toLowerCase();
   const tipo = tipoFilter.value;
   const precoMax = parseFloat(precoMaxFilter.value) || Infinity;
   const duracaoMin = parseInt(duracaoMinFilter.value) || 0;
 
-  // Obter IDs dos produtos já reservados
-  const reservas = typeof getReservas === 'function' ? getReservas() : [];
-  const idsReservados = reservas.map(r => r.id);
+  // Obter reservas e converter IDs para String para comparação segura
+  const reservas = (typeof getReservas === 'function') ? getReservas() : [];
+  const idsReservados = reservas.map(r => String(r.id));
+  
+  console.log("DEBUG [Catalogo]: IDs já reservados:", idsReservados);
 
   const filtrados = products.filter(product => {
     const matchesSearch = product.nome.toLowerCase().includes(termo);
     const matchesTipo = tipo === "" || product.tipo === tipo;
     const matchesPreco = product.preco <= precoMax;
     const matchesDuracao = product.duracao >= duracaoMin;
-    const naoEstaReservado = !idsReservados.includes(product.id);
+    
+    // Comparação robusta (convertendo ambos para String)
+    const naoEstaReservado = !idsReservados.includes(String(product.id));
 
     return matchesSearch && matchesTipo && matchesPreco && matchesDuracao && naoEstaReservado;
   });
 
+  console.log("DEBUG [Catalogo]: Produtos após filtragem:", filtrados.length);
   renderProducts(filtrados);
 }
 
@@ -79,9 +86,12 @@ clearFiltersBtn.addEventListener("click", () => {
   tipoFilter.value = "";
   precoMaxFilter.value = "";
   duracaoMinFilter.value = "";
-  filterProducts(); // Chama a função de filtro para respeitar as reservas
+  filterProducts();
 });
 
-// Initial setup
-populateTypes();
-filterProducts(); // Iniciar logo com o filtro aplicado (para esconder reservados)
+// Garantir que o setup inicial corre quando o DOM está pronto
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("DEBUG [Catalogo]: DOM carregado, a iniciar catálogo...");
+  populateTypes();
+  filterProducts();
+});
