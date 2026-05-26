@@ -21,6 +21,28 @@
   <h1>As Minhas Reservas</h1>
 
   <div id="reservasLista"></div>
+
+  <!-- Modal de Prolongamento -->
+  <div id="modalProlongar" class="modal" style="display:none;">
+    <div class="modal-content">
+      <h2>Prolongar Aluguer</h2>
+      <div id="formProlongar">
+        <p><strong>Equipamento:</strong> <span id="pNome">-</span></p>
+        <p><strong>Fim Atual:</strong> <span id="pDataFimAtual">-</span></p>
+        <div class="form-group">
+          <label for="pNovaDataFim">Nova Data de Fim:</label>
+          <input type="date" id="pNovaDataFim">
+        </div>
+        <div id="pResumo" class="price-summary" style="margin-top: 1rem;">
+          <p>Preço Atualizado: <span id="pPrecoTotal">-</span>€</p>
+        </div>
+      </div>
+      <div class="modal-actions" style="margin-top: 1rem; display: flex; gap: 1rem;">
+        <button id="btnConfirmarProlongar" class="btn">Confirmar</button>
+        <button id="btnCancelarProlongar" class="btn btn-secondary">Voltar</button>
+      </div>
+    </div>
+  </div>
 </section>
 
 <script src="js/storage.js"></script>
