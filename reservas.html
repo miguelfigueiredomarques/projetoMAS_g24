@@ -14,6 +14,7 @@
     <a href="index.html">Home</a>
     <a href="catalogo.html">Catálogo</a>
     <a href="reservas.html">Reservas</a>
+    <a href="manutencao.html">Manutenção</a>
   </nav>
 </header>
 
@@ -40,6 +41,22 @@
       <div class="modal-actions" style="margin-top: 1rem; display: flex; gap: 1rem;">
         <button id="btnConfirmarProlongar" class="btn">Confirmar</button>
         <button id="btnCancelarProlongar" class="btn btn-secondary">Voltar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Recolha -->
+  <div id="modalRecolha" class="modal" style="display:none;">
+    <div class="modal-content">
+      <h2>Pedir Recolha</h2>
+      <p>Escolha uma data para a recolha do equipamento:</p>
+      <div class="form-group">
+        <label for="dataRecolhaInput">Data de Recolha:</label>
+        <input type="date" id="dataRecolhaInput">
+      </div>
+      <div class="modal-actions" style="margin-top: 1rem; display: flex; gap: 1rem;">
+        <button id="btnConfirmarRecolha" class="btn">Agendar Recolha</button>
+        <button id="btnCancelarRecolha" class="btn btn-secondary">Voltar</button>
       </div>
     </div>
   </div>

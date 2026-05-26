@@ -1,8 +1,9 @@
 const STORAGE_KEY = "unirent_reservas_v1";
+const MAINTENANCE_KEY = "unirent_manutencao_v1";
 
 // Gera um ID único simples
-function generateId() {
-  return 'RES-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+function generateId(prefix = 'RES') {
+  return prefix + '-' + Math.random().toString(36).substr(2, 9).toUpperCase();
 }
 
 function getReservas() {
@@ -26,6 +27,10 @@ function saveReserva(reserva) {
     // Estado inicial
     if (!reserva.estado) {
       reserva.estado = "Ativa";
+    }
+    // Estado de entrega inicial
+    if (!reserva.estadoEntrega) {
+      reserva.estadoEntrega = "Em preparação";
     }
     
     reservas.push(reserva);
@@ -61,6 +66,13 @@ function finalizeReserva(id_reserva) {
   return updateReserva(id_reserva, { estado: "Finalizada" });
 }
 
+function requestRecolha(id_reserva, dataRecolha) {
+  return updateReserva(id_reserva, { 
+    estado: "A aguardar recolha",
+    dataRecolha: dataRecolha
+  });
+}
+
 function removeReserva(index) {
   try {
     const reservas = getReservas();
@@ -75,9 +87,53 @@ function removeReserva(index) {
   }
 }
 
+// --- MANUTENÇÃO ---
+
+function getPedidosManutencao() {
+  try {
+    const data = localStorage.getItem(MAINTENANCE_KEY);
+    return data ? JSON.parse(data) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function savePedidoManutencao(pedido) {
+  try {
+    const pedidos = getPedidosManutencao();
+    pedido.id_pedido = generateId('MNT');
+    pedido.estado = pedido.estado || "Recebido";
+    pedido.dataRegisto = new Date().toLocaleDateString('pt-PT');
+    pedidos.push(pedido);
+    localStorage.setItem(MAINTENANCE_KEY, JSON.stringify(pedidos));
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+function updatePedidoManutencao(id_pedido, novosDados) {
+  try {
+    let pedidos = getPedidosManutencao();
+    const index = pedidos.findIndex(p => p.id_pedido === id_pedido);
+    if (index !== -1) {
+      pedidos[index] = { ...pedidos[index], ...novosDados };
+      localStorage.setItem(MAINTENANCE_KEY, JSON.stringify(pedidos));
+      return true;
+    }
+    return false;
+  } catch (e) {
+    return false;
+  }
+}
+
 window.getReservas = getReservas;
 window.saveReserva = saveReserva;
 window.updateReserva = updateReserva;
 window.cancelReserva = cancelReserva;
 window.finalizeReserva = finalizeReserva;
+window.requestRecolha = requestRecolha;
 window.removeReserva = removeReserva;
+window.getPedidosManutencao = getPedidosManutencao;
+window.savePedidoManutencao = savePedidoManutencao;
+window.updatePedidoManutencao = updatePedidoManutencao;

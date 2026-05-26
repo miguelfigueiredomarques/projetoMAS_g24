@@ -18,23 +18,32 @@ function renderReservas() {
       // Garantir que temos um estado, por defeito "Ativa"
       const estado = reserva.estado || "Ativa";
       const isAtiva = estado === "Ativa";
+      const estadoEntrega = reserva.estadoEntrega || "Em preparação";
       
       let statusClass = "status-ativa";
       if (estado === "Cancelada") statusClass = "status-cancelada";
       if (estado === "Finalizada") statusClass = "status-finalizada";
+      if (estado === "A aguardar recolha") statusClass = "status-aguarda-recolha";
       
+      let entregaClass = "status-prep";
+      if (estadoEntrega === "Em transporte") entregaClass = "status-transporte";
+      if (estadoEntrega === "Entregue") entregaClass = "status-entregue";
+
       html += `
-        <div class="reserva-item ${!isAtiva ? 'reserva-inativa' : ''}">
+        <div class="reserva-item ${!isAtiva && estado !== "A aguardar recolha" ? 'reserva-inativa' : ''}">
           <img src="${reserva.imagem}" alt="${reserva.nome}">
           <div class="reserva-detalhes">
             <h3>${reserva.nome} <span class="badge ${statusClass}">${estado}</span></h3>
-            <p class="reserva-meta">Início: ${reserva.dataInicio} | Fim: ${reserva.dataFim}</p>
-            <p class="reserva-meta">Duração: ${reserva.duracaoLabel || reserva.duracaoDias + ' dias'}</p>
+            <p class="reserva-meta"><strong>Estado Entrega:</strong> <span class="badge ${entregaClass}">${estadoEntrega}</span></p>
+            <p class="reserva-meta">Entrega Agendada: ${reserva.dataEntrega || 'N/A'}</p>
+            <p class="reserva-meta">Aluguer: ${reserva.dataInicio} até ${reserva.dataFim}</p>
+            ${reserva.dataRecolha ? `<p class="reserva-meta"><strong>Recolha Agendada:</strong> ${reserva.dataRecolha}</p>` : ''}
             <p class="reserva-preco">Total: ${reserva.preco}€</p>
           </div>
           <div class="reserva-actions">
             ${isAtiva ? `
               <button class="btn-extend" onclick="openProlongar('${reserva.id_reserva}')">Prolongar</button>
+              <button class="btn-recolha" onclick="openRecolha('${reserva.id_reserva}')">Pedir Recolha</button>
               <button class="btn-finalize" onclick="handleFinalizar('${reserva.id_reserva}')">Finalizar</button>
               <button class="btn-remove" onclick="handleCancelar('${reserva.id_reserva}')">Cancelar</button>
             ` : `
@@ -47,6 +56,37 @@ function renderReservas() {
     reservasLista.innerHTML = html;
   }
 }
+
+// --- RECOLHA ---
+window.openRecolha = function(id) {
+  currentReservaId = id;
+  const inputRecolha = document.getElementById("dataRecolhaInput");
+  const reserva = getReservas().find(r => r.id_reserva === id);
+  inputRecolha.min = reserva.dataInicio;
+  inputRecolha.value = reserva.dataFim;
+  document.getElementById("modalRecolha").style.display = "flex";
+}
+
+document.getElementById("btnConfirmarRecolha").onclick = () => {
+  const dataRecolha = document.getElementById("dataRecolhaInput").value;
+  if (!dataRecolha) {
+    alert("Por favor escolha uma data para a recolha.");
+    return;
+  }
+
+  const sucesso = requestRecolha(currentReservaId, dataRecolha);
+  if (sucesso) {
+    alert("Pedido de recolha agendado com sucesso!");
+    document.getElementById("modalRecolha").style.display = "none";
+    renderReservas();
+  } else {
+    alert("Erro ao agendar recolha.");
+  }
+};
+
+document.getElementById("btnCancelarRecolha").onclick = () => {
+  document.getElementById("modalRecolha").style.display = "none";
+};
 
 // --- FINALIZAÇÃO ---
 window.handleFinalizar = function(id) {

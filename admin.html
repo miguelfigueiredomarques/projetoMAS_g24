@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - UniRent</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .admin-section { margin-bottom: 3rem; background: #fff; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    th, td { text-align: left; padding: 0.8rem; border-bottom: 1px solid #eee; }
+    th { background: #f8f9fa; }
+    .btn-small { padding: 0.3rem 0.6rem; font-size: 0.8rem; }
+    @media (max-width: 900px) { .admin-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">UniRent ADMIN</div>
+  <nav>
+    <a href="index.html">Sair</a>
+  </nav>
+</header>
+
+<div class="catalogo-container">
+  <h1>Dashboard de Administração (Simulado)</h1>
+
+  <div class="admin-section">
+    <h2>Gestão de Entregas e Reservas</h2>
+    <table id="tabelaEntregas">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Equipamento</th>
+          <th>Data Entrega</th>
+          <th>Estado Entrega</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div class="admin-grid">
+    <div class="admin-section">
+      <h2>Pedidos de Manutenção / Avaria</h2>
+      <table id="tabelaManutencao">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Equipamento</th>
+            <th>Estado</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="admin-section">
+      <h2>Histórico por Equipamento</h2>
+      <div class="form-group">
+        <label for="filtroEquipamento">Filtrar por ID de Equipamento (ex: 1, 2, 3):</label>
+        <input type="text" id="filtroEquipamento" placeholder="ID do Produto...">
+      </div>
+      <div id="historicoResultados"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Admin Manutenção -->
+<div id="modalAdminMnt" class="modal" style="display:none;">
+  <div class="modal-content">
+    <h2>Gerir Manutenção</h2>
+    <p id="mntInfo"></p>
+    <div class="form-group">
+      <label for="mntAcao">Decisão:</label>
+      <select id="mntAcao">
+        <option value="Em análise">Em análise</option>
+        <option value="Em reparação">Em reparação</option>
+        <option value="Recolha agendada">Agendar Recolha</option>
+        <option value="Substituição agendada">Agendar Substituição</option>
+        <option value="Resolvido">Marcar como Resolvido</option>
+      </select>
+    </div>
+    <div class="form-group" id="grpDataMnt" style="display:none;">
+      <label for="dataMnt">Data Agendada:</label>
+      <input type="date" id="dataMnt">
+    </div>
+    <div class="modal-actions">
+      <button id="btnSalvarMnt" class="btn">Atualizar Pedido</button>
+      <button id="btnFecharMnt" class="btn btn-secondary">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/storage.js"></script>
+<script src="js/admin.js"></script>
+
+</body>
+</html>

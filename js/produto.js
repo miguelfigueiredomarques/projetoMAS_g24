@@ -22,6 +22,10 @@ if(product) {
             <input type="date" id="dataInicio" min="${new Date().toISOString().split('T')[0]}">
           </div>
           <div class="form-group">
+            <label for="dataEntrega">Data de Entrega Desejada:</label>
+            <input type="date" id="dataEntrega" min="${new Date().toISOString().split('T')[0]}">
+          </div>
+          <div class="form-group">
             <label for="duracaoPredefinida">Duração:</label>
             <select id="duracaoPredefinida">
               <option value="personalizado">Personalizado</option>
@@ -140,9 +144,22 @@ if(product) {
     const modal = document.getElementById("modalResumo");
     const detalhes = document.getElementById("detalhesResumo");
     
+    const dataEntrega = document.getElementById("dataEntrega").value;
+    
+    if (!dataEntrega) {
+      alert("Por favor selecione uma data de entrega.");
+      return;
+    }
+
+    if (dataEntrega > inputInicio.value) {
+      alert("A data de entrega deve ser anterior ou igual à data de início do aluguer.");
+      return;
+    }
+
     detalhes.innerHTML = `
       <p><strong>Equipamento:</strong> ${product.nome}</p>
-      <p><strong>De:</strong> ${inputInicio.value}</p>
+      <p><strong>Entrega Agendada:</strong> ${dataEntrega}</p>
+      <p><strong>Aluguer de:</strong> ${inputInicio.value}</p>
       <p><strong>Até:</strong> ${inputFim.value}</p>
       <p><strong>Duração:</strong> ${dados.diffDays} dias</p>
       <p><strong>Preço Total:</strong> ${dados.precoTotal}€</p>
@@ -165,10 +182,12 @@ if(product) {
       imagem: product.imagem,
       dataInicio: inputInicio.value,
       dataFim: inputFim.value,
+      dataEntrega: document.getElementById("dataEntrega").value,
       duracaoDias: dados.diffDays,
       duracaoLabel: duracaoTexto,
       dataRegisto: new Date().toLocaleDateString('pt-PT'),
-      estado: "Ativa"
+      estado: "Ativa",
+      estadoEntrega: "Em preparação"
     };
 
     if (saveReserva(novaReserva)) {

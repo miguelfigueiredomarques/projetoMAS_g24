@@ -298,6 +298,21 @@ nav a:hover {
   background: #ec971f;
 }
 
+.btn-recolha {
+  background: #17a2b8;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  margin-right: 0.5rem;
+}
+
+.btn-recolha:hover {
+  background: #138496;
+}
+
 .btn-finalize {
   background: #28a745;
   color: white;
@@ -353,6 +368,26 @@ nav a:hover {
 .status-finalizada {
   background: #cfe2ff;
   color: #084298;
+}
+
+.status-aguarda-recolha {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status-prep {
+  background: #e2e3e5;
+  color: #383d41;
+}
+
+.status-transporte {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
+.status-entregue {
+  background: #d4edda;
+  color: #155724;
 }
 
 .reserva-inativa {

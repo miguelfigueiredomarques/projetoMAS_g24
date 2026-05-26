@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manutenção - UniRent</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+  <div class="logo">UniRent</div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="catalogo.html">Catálogo</a>
+    <a href="reservas.html">Reservas</a>
+    <a href="manutencao.html">Manutenção</a>
+  </nav>
+</header>
+
+<section class="reservas-container">
+  <h1>Os Meus Pedidos de Manutenção</h1>
+
+  <div class="actions-header" style="margin-bottom: 2rem; text-align: center;">
+    <button id="btnNovoReporte" class="btn">Reportar Nova Avaria</button>
+  </div>
+
+  <div id="manutencaoLista"></div>
+
+  <!-- Modal de Reporte -->
+  <div id="modalReporte" class="modal" style="display:none;">
+    <div class="modal-content">
+      <h2>Reportar Avaria</h2>
+      <form id="formReporte">
+        <div class="form-group">
+          <label for="equipamentoSelect">Selecionar Equipamento Alugado:</label>
+          <select id="equipamentoSelect" required>
+            <option value="">Selecione um equipamento...</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="descricaoAvaria">Descrição da Avaria:</label>
+          <textarea id="descricaoAvaria" rows="4" style="width:100%; padding:0.5rem;" placeholder="Descreva o problema detalhadamente..." required></textarea>
+        </div>
+        <div class="modal-actions" style="margin-top: 1rem; display: flex; gap: 1rem;">
+          <button type="submit" class="btn">Enviar Reporte</button>
+          <button type="button" id="btnCancelarReporte" class="btn btn-secondary">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script src="js/storage.js"></script>
+<script src="js/manutencao.js"></script>
+
+</body>
+</html>
