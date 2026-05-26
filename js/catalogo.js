@@ -52,13 +52,18 @@ function filterProducts() {
   const precoMax = parseFloat(precoMaxFilter.value) || Infinity;
   const duracaoMin = parseInt(duracaoMinFilter.value) || 0;
 
+  // Obter IDs dos produtos já reservados
+  const reservas = typeof getReservas === 'function' ? getReservas() : [];
+  const idsReservados = reservas.map(r => r.id);
+
   const filtrados = products.filter(product => {
     const matchesSearch = product.nome.toLowerCase().includes(termo);
     const matchesTipo = tipo === "" || product.tipo === tipo;
     const matchesPreco = product.preco <= precoMax;
     const matchesDuracao = product.duracao >= duracaoMin;
+    const naoEstaReservado = !idsReservados.includes(product.id);
 
-    return matchesSearch && matchesTipo && matchesPreco && matchesDuracao;
+    return matchesSearch && matchesTipo && matchesPreco && matchesDuracao && naoEstaReservado;
   });
 
   renderProducts(filtrados);
@@ -74,13 +79,9 @@ clearFiltersBtn.addEventListener("click", () => {
   tipoFilter.value = "";
   precoMaxFilter.value = "";
   duracaoMinFilter.value = "";
-  renderProducts(products);
+  filterProducts(); // Chama a função de filtro para respeitar as reservas
 });
 
 // Initial setup
 populateTypes();
-if (products.length === 0) {
-    productsContainer.innerHTML = "<p class='no-results'>Nenhum eletrodoméstico disponível</p>";
-} else {
-    renderProducts(products);
-}
+filterProducts(); // Iniciar logo com o filtro aplicado (para esconder reservados)
