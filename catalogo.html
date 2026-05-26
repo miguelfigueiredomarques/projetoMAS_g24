@@ -20,7 +20,19 @@
 <section class="catalogo-container">
   <h1>Catálogo de Eletrodomésticos</h1>
 
-  <input type="text" id="searchInput" placeholder="Pesquisar equipamento...">
+  <div class="filters-container">
+    <input type="text" id="searchInput" placeholder="Pesquisar equipamento...">
+    
+    <select id="tipoFilter">
+      <option value="">Todos os Tipos</option>
+    </select>
+
+    <input type="number" id="precoMax" placeholder="Preço máximo (€)">
+    
+    <input type="number" id="duracaoMin" placeholder="Duração mínima (meses)">
+
+    <button id="clearFilters">Limpar Filtros</button>
+  </div>
 
   <div id="productsContainer" class="products-grid"></div>
 </section>
