@@ -44,7 +44,6 @@ function renderReservas() {
             ${isAtiva ? `
               <button class="btn-extend" onclick="openProlongar('${reserva.id_reserva}')">Prolongar</button>
               <button class="btn-recolha" onclick="openRecolha('${reserva.id_reserva}')">Pedir Recolha</button>
-              <button class="btn-finalize" onclick="handleFinalizar('${reserva.id_reserva}')">Finalizar</button>
               <button class="btn-remove" onclick="handleCancelar('${reserva.id_reserva}')">Cancelar</button>
             ` : `
               <button class="btn-secondary" onclick="handleEliminar('${reserva.id_reserva}')">Eliminar Registo</button>
@@ -87,19 +86,6 @@ document.getElementById("btnConfirmarRecolha").onclick = () => {
 document.getElementById("btnCancelarRecolha").onclick = () => {
   document.getElementById("modalRecolha").style.display = "none";
 };
-
-// --- FINALIZAÇÃO ---
-window.handleFinalizar = function(id) {
-  if(confirm("Deseja marcar esta reserva como finalizada? (Simula a entrega do equipamento)")) {
-    const sucesso = finalizeReserva(id);
-    if (sucesso) {
-      alert("Reserva finalizada com sucesso!");
-      renderReservas();
-    } else {
-      alert("Erro ao finalizar a reserva.");
-    }
-  }
-}
 
 // --- CANCELAMENTO ---
 window.handleCancelar = function(id) {
